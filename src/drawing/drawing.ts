@@ -28,9 +28,9 @@ export const drawCircle = async (width: number) => {
   const { x, y } = position;
 
   console.log(x, y);
-  const x0 = x - width;
+  const x0 = x - width / 2;
   const y0 = y;
-  let R = width,
+  let R = width / 2,
     A = 0,
     PI2 = Math.PI * 2,
     dA = PI2 / 64;
