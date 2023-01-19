@@ -12,6 +12,7 @@ import {
 } from "@nut-tree/nut-js";
 import COMMANDS from "../constants/commands";
 import { drawCircle, drawRectangle } from "../drawing/drawing";
+import { moveDown, moveLeft, moveRight, moveUp } from "../navigation/navigation";
 
 // Creating connection using websocket
 
@@ -33,6 +34,18 @@ const onConnectWS = async (ws: WebSocket) => {
       //    const img = await screen.capture("./").then((im) => ws.send(im));
     }
 
+    if (command === COMMANDS.UP) {
+      await moveUp(width)
+    }
+    if (command === COMMANDS.DOWN) {
+      await moveDown(width)
+    }
+    if (command === COMMANDS.LEFT) {
+      await moveLeft(width)
+    }
+    if (command === COMMANDS.RIGHT) {
+      await moveRight(width)
+    }
     if (command === COMMANDS.SQUARE) {
       await drawRectangle(width, width);
     }
