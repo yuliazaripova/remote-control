@@ -8,7 +8,7 @@ const onConnectWS = async (ws: WebSocket) => {
   console.log("new client connected");
   // sending message
 
-  ws.on("message", async (data, isBinary) => {
+  ws.on("message", async (data) => {
   //  ws.send("prt");
 
     //  console.log(JSON.stringify(data));

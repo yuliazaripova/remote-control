@@ -25,3 +25,9 @@ export const moveLeft = async (x: number) => {
 export const moveRight = async (x: number) => {
   await mouse.move(right(x));
 };
+
+export const getMousePosition = async () => {
+  const position = await mouse.getPosition();
+  const { x, y } = position;
+  return { x, y };
+};

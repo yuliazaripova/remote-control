@@ -3,6 +3,7 @@ import { Region, screen } from "@nut-tree/nut-js";
 import COMMANDS from "../constants/commands";
 import { drawCircle, drawRectangle } from "../drawing/drawing";
 import {
+  getMousePosition,
   moveDown,
   moveLeft,
   moveRight,
@@ -25,6 +26,11 @@ const handleCommand = async (
   length: number,
   ws: any
 ) => {
+  if (command === COMMANDS.POS) {
+    const { x, y } = await getMousePosition();
+    ws.send(`mouse_position ${x},${y}`);
+  }
+
   if (command === COMMANDS.PRNT) {
     const r = new Region(100, 100, 100, 100);
     const img = await screen.grabRegion(r);
@@ -35,7 +41,6 @@ const handleCommand = async (
 
     ws.send(`prnt_scrn ${a1.replace(/^data:image\/png;base64,/, "")}`);
   }
-
 
   if (command === COMMANDS.UP) {
     await moveUp(width);

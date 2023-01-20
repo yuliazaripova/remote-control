@@ -7,6 +7,7 @@ const COMMANDS = {
   LEFT: "mouse_left",
   RIGHT: "mouse_right",
   PRNT: "prnt_scrn",
+  POS: "mouse_position",
 };
 
 export default COMMANDS;
