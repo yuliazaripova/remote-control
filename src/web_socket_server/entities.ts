@@ -1,5 +1,4 @@
 import { RawData } from "ws";
-import { Region, screen } from "@nut-tree/nut-js";
 import COMMANDS from "../constants/commands";
 import { drawCircle, drawRectangle } from "../drawing/drawing";
 import {
@@ -9,10 +8,7 @@ import {
   moveRight,
   moveUp,
 } from "../navigation/navigation";
-import { createReadStream, readFile } from "fs";
-import Jimp from "jimp";
 import { getPrintScreen, prepareBase64 } from "../print/print";
-import { setMaxIdleHTTPParsers } from "http";
 
 const getParams = (data: RawData): [string, number, number] => {
   const [command, _width, _length] = data.toString().split(" ");
