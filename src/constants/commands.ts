@@ -10,4 +10,7 @@ const COMMANDS = {
   POS: "mouse_position",
 };
 
+export const PRNT_WIDTH = 200;
+export const PRNT_HEIGHT = PRNT_WIDTH;
+
 export default COMMANDS;

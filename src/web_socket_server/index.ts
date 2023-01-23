@@ -1,32 +1,27 @@
 import WebSocket, { WebSocketServer } from "ws";
 import { handleWsData } from "./entities";
-import { Region, screen } from "@nut-tree/nut-js";
-import COMMANDS from "../constants/commands";
-// Creating connection using websocket
 
+const webSocketPort = +(process.env.WEB_SOCKET_PORT || 8080);
 const onConnectWS = async (ws: WebSocket) => {
-  console.log("new client connected");
-  // sending message
+  console.log(`Websocket server on the ws://localhost:${webSocketPort}/`);
 
   ws.on("message", async (data) => {
-  //  ws.send("prt");
-
-    //  console.log(JSON.stringify(data));
-    console.log(`Client has sent us: ${data.toString("utf8")}`);
-
     handleWsData(data, ws);
   });
+
   ws.on("upgrade", (response) => {
     console.log({ response });
   });
-  // handling what to do when clients disconnects from server
+
   ws.on("close", () => {
-    console.log("the client has connected");
+    console.log("WS connection closed");
   });
-  // handling client connection error
+
   ws.onerror = function () {
     console.log("Some Error occurred");
   };
+
+  process.on("SIGINT", () => ws.close());
 };
 
 export default onConnectWS;

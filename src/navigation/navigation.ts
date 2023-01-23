@@ -9,6 +9,7 @@ import {
   Image,
   imageResource,
 } from "@nut-tree/nut-js";
+import COMMANDS from "../constants/commands";
 
 export const moveUp = async (y: number) => {
   await mouse.move(up(y));
@@ -29,5 +30,9 @@ export const moveRight = async (x: number) => {
 export const getMousePosition = async () => {
   const position = await mouse.getPosition();
   const { x, y } = position;
+  console.log({
+    command: COMMANDS.POS,
+    result: `mouse_position ${x},${y}`,
+  });
   return { x, y };
 };

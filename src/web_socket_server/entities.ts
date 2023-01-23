@@ -11,6 +11,8 @@ import {
 } from "../navigation/navigation";
 import { createReadStream, readFile } from "fs";
 import Jimp from "jimp";
+import { getPrintScreen, prepareBase64 } from "../print/print";
+import { setMaxIdleHTTPParsers } from "http";
 
 const getParams = (data: RawData): [string, number, number] => {
   const [command, _width, _length] = data.toString().split(" ");
@@ -18,6 +20,33 @@ const getParams = (data: RawData): [string, number, number] => {
   const width = Number(_width);
   const length = Number(_length);
   return [command, width, length];
+};
+
+const formatArg = (arg: number) => `${arg ? "_" + arg : ""}`;
+
+const sendCommand = (
+  command: string,
+  width: number,
+  length: number,
+  ws: any
+) => {
+  const res = command + formatArg(width) + formatArg(length);
+  ws.send(res);
+  console.log({
+    command,
+    result: res,
+  });
+};
+
+const logCommand = (
+  command: string,
+  width: number,
+  length: number,
+  ws: any
+) => {
+  if (!(command === COMMANDS.POS || command === COMMANDS.PRNT)) {
+    sendCommand(command, width, length, ws);
+  }
 };
 
 const handleCommand = async (
@@ -30,16 +59,9 @@ const handleCommand = async (
     const { x, y } = await getMousePosition();
     ws.send(`mouse_position ${x},${y}`);
   }
-
   if (command === COMMANDS.PRNT) {
-    const r = new Region(100, 100, 100, 100);
-    const img = await screen.grabRegion(r);
-    const _img = await img.toRGB();
-    const q = new Jimp(_img).rgba(true);
-    const a = await Jimp.read(q);
-    const a1 = await a.getBase64Async(Jimp.MIME_PNG);
-
-    ws.send(`prnt_scrn ${a1.replace(/^data:image\/png;base64,/, "")}`);
+    const res = await getPrintScreen();
+    ws.send(`prnt_scrn ${prepareBase64(res)}`);
   }
 
   if (command === COMMANDS.UP) {
@@ -63,12 +85,10 @@ const handleCommand = async (
   if (command === COMMANDS.CIRCLE) {
     await drawCircle(width);
   }
+  logCommand(command, width, length, ws);
 };
 
 export const handleWsData = (data: RawData, ws: any) => {
   const [command, width, length] = getParams(data);
   handleCommand(command, width, length, ws);
 };
-function base64ToPage(base64: string) {
-  throw new Error("Function not implemented.");
-}
